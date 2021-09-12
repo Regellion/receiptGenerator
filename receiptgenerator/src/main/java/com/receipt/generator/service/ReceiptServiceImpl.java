@@ -24,7 +24,7 @@ import java.util.*;
 @AllArgsConstructor
 public class ReceiptServiceImpl implements ReceiptService {
     private static final String RECEIPT_REPORT_FILEPATH = "classpath:reports/ReceiptReport/ReceiptReport.jrxml";
-    private static final String PATH_TO_REPORTS_DIR = "C:\\git senla\\receipt\\";
+    private static final String PATH_TO_REPORTS_DIR = "/receipt/";
 
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<Long, BookingReceiptInfoDto> kafkaTemplate;
@@ -80,6 +80,7 @@ public class ReceiptServiceImpl implements ReceiptService {
             param.put("Author", "Artem Martynov");
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, param, dataSource);
+            new File(PATH_TO_REPORTS_DIR).mkdir();
             JasperExportManager.exportReportToPdfFile(jasperPrint, PATH_TO_REPORTS_DIR + uuid + ".pdf");
             log.info("In generateReport report generated complete");
         } catch (FileNotFoundException | JRException e) {
